@@ -73,8 +73,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					.setTabListener(this));
 		}
 
-		User.getById("1");
-
 	}
 
 	@Override
