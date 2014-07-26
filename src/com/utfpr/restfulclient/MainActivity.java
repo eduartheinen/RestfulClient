@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.utfpr.restfulclient.model.User;
-
 public class MainActivity extends Activity implements ActionBar.TabListener {
 
 	/**
@@ -74,6 +72,25 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		}
 
 	}
+
+//	private void login() {
+//		final NetworkHandler networkHandler = NetworkHandler.getInstance();
+//		final String url = "http://192.168.0.5:8080/restfulServer/users";
+//		networkHandler.readList(url, User[].class, new Callback<List<User>>() {
+//
+//			@Override
+//			public void callback(List<User> t) {
+//				for (User user : t) {
+//					try {
+//						Log.i("login#callback", user.toJSON());
+//					} catch (JSONException e) {
+//						Log.i("login#callback", e.getMessage());
+//					}
+//				}
+//
+//			}
+//		});
+//	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

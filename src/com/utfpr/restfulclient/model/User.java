@@ -56,20 +56,4 @@ public class User {
 		obj.put("email", this.email);
 		return obj.toString();
 	}
-
-//	public static User getById(String id) {
-//		JsonHelper.get("users/" + id, null, new JsonHttpResponseHandler() {
-//			public void onSuccess(int statusCode,
-//					org.apache.http.Header[] headers, JSONObject response) {
-//				Log.i("user#getById:", response.toString());
-//			};
-//
-//			public void onFailure(int statusCode,
-//					org.apache.http.Header[] headers, Throwable throwable,
-//					JSONObject errorResponse) {
-//				Log.i("user#getById:", throwable.getMessage());
-//			};
-//		});
-//		return null;
-//	}
 }
