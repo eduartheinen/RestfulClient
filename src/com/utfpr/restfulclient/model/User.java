@@ -1,9 +1,12 @@
 package com.utfpr.restfulclient.model;
 
+import java.io.Serializable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User {
+@SuppressWarnings("serial")
+public class User implements Serializable {
 	private String id, username, password, email;
 
 	public User() {

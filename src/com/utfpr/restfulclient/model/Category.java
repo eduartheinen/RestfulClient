@@ -1,9 +1,12 @@
 package com.utfpr.restfulclient.model;
 
+import java.io.Serializable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Category {
+@SuppressWarnings("serial")
+public class Category implements Serializable{
 	private String id, name;
 
 	public Category() {

@@ -1,5 +1,7 @@
 package com.utfpr.restfulclient;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 import com.utfpr.restfulclient.LoginFragment.OnLoginListener;
 import com.utfpr.restfulclient.helper.Callback;
 import com.utfpr.restfulclient.helper.NetworkHandler;
+import com.utfpr.restfulclient.model.Category;
 import com.utfpr.restfulclient.model.User;
 
 public class LoginActivity extends Activity implements OnLoginListener {
@@ -53,24 +56,40 @@ public class LoginActivity extends Activity implements OnLoginListener {
 
 					@Override
 					public void callback(User user) {
-						if(user != null){
-							Log.i("onLogin - callback@LoginActivity",
-									user.toString());
-							handleLogin(user);
+						if (user != null) {
+							getCategories(user);
 						}
-						Toast.makeText(getApplicationContext(), "Problemas com o acesso. Verifique seus dados e tente novamente.", Toast.LENGTH_LONG).show();
+						Toast.makeText(
+								getApplicationContext(),
+								"Problemas com o acesso. Verifique seus dados e tente novamente.",
+								Toast.LENGTH_LONG).show();
 					}
+
 				});
 	}
 
-	private void handleLogin(User user) {
+	private void getCategories(final User user) {
+		NetworkHandler rest = NetworkHandler.getInstance();
+		rest.readList("http://192.168.0.5:8080/restfulServer/categories",
+				Category[].class, new Callback<List<Category>>() {
+
+					@Override
+					public void callback(List<Category> categories) {
+						if (categories != null) {
+							Log.i("callback - getCategories@LoginActivity",
+									"size: " + categories.size());
+							handleLogin(user, categories);
+						}
+					}
+				});
+
+	}
+
+	private void handleLogin(User user, List<Category> categories) {
 		Log.i("handleLogin@LoginActivity", "hai!");
 		Intent intent = new Intent(this, MainActivity.class);
-		Bundle params = new Bundle();
-		params.putInt("code", 123);
-		params.putString("name", "Fulano");
-		intent.putExtras(params);
-
+		intent.putExtra("user", user);
+		
 		startActivity(intent);
 	}
 }

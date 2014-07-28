@@ -1,6 +1,7 @@
 package com.utfpr.restfulclient.helper;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -22,7 +23,15 @@ public class GetTask extends AsyncTask<String, String, String> {
 		final WebResource resource = client.resource(url);
 		final ClientResponse response = resource.accept(
 				MIMETypes.APPLICATION_JSON.getName()).get(ClientResponse.class);
-		return response.getEntity(String.class);
+		
+		if (response.getStatus() != 201 && response.getStatus() != 200) {
+			Log.e("response", response.toString());
+		}
+
+		String responseEntity = response.getEntity(String.class);
+		Log.i("doInBackground@GetTask", responseEntity);
+		
+		return responseEntity;
 	}
 
 	@Override

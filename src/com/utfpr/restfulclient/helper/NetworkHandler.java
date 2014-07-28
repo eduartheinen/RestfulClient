@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.jersey.spi.service.ServiceFinder;
@@ -41,6 +43,7 @@ public class NetworkHandler {
 
 			@Override
 			public void callback(String result) {
+				Log.i("readList@NetworkHandler", result);
 				final T[] array = new GsonBuilder().create().fromJson(result,
 						clazz);
 				callback.callback(new ArrayList<T>(Arrays.asList(array)));
