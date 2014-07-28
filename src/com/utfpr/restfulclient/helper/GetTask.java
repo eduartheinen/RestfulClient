@@ -12,7 +12,7 @@ public class GetTask extends AsyncTask<String, String, String> {
 	private final String url;
 	private final Callback<String> callback;
 
-	GetTask(String url, Callback<String> callback) {
+	public GetTask(String url, Callback<String> callback) {
 		this.url = url;
 		this.callback = callback;
 	}
@@ -36,8 +36,8 @@ public class GetTask extends AsyncTask<String, String, String> {
 
 	@Override
 	protected void onPostExecute(String result) {
-		callback.callback(result);
 		super.onPostExecute(result);
+		callback.callback(result);
 	}
 
 }

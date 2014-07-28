@@ -1,9 +1,10 @@
 package com.utfpr.restfulclient;
 
-import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +14,6 @@ import android.widget.Toast;
 import com.utfpr.restfulclient.LoginFragment.OnLoginListener;
 import com.utfpr.restfulclient.helper.Callback;
 import com.utfpr.restfulclient.helper.NetworkHandler;
-import com.utfpr.restfulclient.model.Category;
 import com.utfpr.restfulclient.model.User;
 
 public class LoginActivity extends Activity implements OnLoginListener {
@@ -50,46 +50,42 @@ public class LoginActivity extends Activity implements OnLoginListener {
 
 	@Override
 	public void onLogin(String username, String password) {
+		SharedPreferences config = getPreferences(LoginActivity.MODE_PRIVATE);
+		SharedPreferences.Editor editor = config.edit();
+		editor.putString("lastLogin", username);
 		NetworkHandler rest = NetworkHandler.getInstance();
-		rest.write("http://192.168.0.5:8080/restfulServer/login", User.class,
-				new User(null, username, password, null), new Callback<User>() {
+		try {
+			rest.write("http://10.0.2.2:8080/restfulServer/login", User.class,
+					new User(null, username, password, null), new Callback<User>() {
 
-					@Override
-					public void callback(User user) {
-						if (user != null) {
-							getCategories(user);
+						@Override
+						public void callback(User user) {
+							try {
+								handleLogin(user);
+							} catch (Exception e) {
+								Toast.makeText(
+										getApplicationContext(),
+										"Problemas com o acesso. Verifique seus dados e tente novamente.",
+										Toast.LENGTH_LONG).show();
+							}
+
 						}
-						Toast.makeText(
-								getApplicationContext(),
-								"Problemas com o acesso. Verifique seus dados e tente novamente.",
-								Toast.LENGTH_LONG).show();
-					}
 
-				});
+					});
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	private void getCategories(final User user) {
-		NetworkHandler rest = NetworkHandler.getInstance();
-		rest.readList("http://192.168.0.5:8080/restfulServer/categories",
-				Category[].class, new Callback<List<Category>>() {
-
-					@Override
-					public void callback(List<Category> categories) {
-						if (categories != null) {
-							Log.i("callback - getCategories@LoginActivity",
-									"size: " + categories.size());
-							handleLogin(user, categories);
-						}
-					}
-				});
-
-	}
-
-	private void handleLogin(User user, List<Category> categories) {
+	private void handleLogin(User user) {
 		Log.i("handleLogin@LoginActivity", "hai!");
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("user", user);
-		
+
 		startActivity(intent);
 	}
 }

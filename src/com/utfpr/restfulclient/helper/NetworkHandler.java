@@ -3,6 +3,7 @@ package com.utfpr.restfulclient.helper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import android.util.Log;
 
@@ -26,7 +27,8 @@ public class NetworkHandler {
 	}
 
 	public <T> void read(final String url, final Class<T> clazz,
-			final Callback<T> callback) {
+			final Callback<T> callback) throws InterruptedException,
+			ExecutionException {
 		new GetTask(url, new Callback<String>() {
 
 			@Override
@@ -38,7 +40,8 @@ public class NetworkHandler {
 	}
 
 	public <T> void readList(final String url, final Class<T[]> clazz,
-			final Callback<List<T>> callback) {
+			final Callback<List<T>> callback) throws InterruptedException,
+			ExecutionException {
 		new GetTask(url, new Callback<String>() {
 
 			@Override
@@ -51,8 +54,28 @@ public class NetworkHandler {
 		}).execute();
 	}
 
+	public <T> void syncReadList(final String url, final Class<T[]> clazz,
+			final Callback<List<T>> callback) throws InterruptedException,
+			ExecutionException {
+
+		GetTask task = new GetTask(url, new Callback<String>() {
+
+			@Override
+			public void callback(String result) {
+				Log.i("readList@NetworkHandler", result);
+				final T[] array = new GsonBuilder().create().fromJson(result,
+						clazz);
+				callback.callback(new ArrayList<T>(Arrays.asList(array)));
+			}
+		});
+
+		task.execute().get();
+		Log.i("getCategories@sectionsPagerAdapter", "hai!");
+	}
+
 	public <T> void write(final String url, final Class<T> clazz, final T t,
-			final Callback<T> callback) {
+			final Callback<T> callback) throws InterruptedException,
+			ExecutionException {
 		final Gson gson = new GsonBuilder().create();
 		new PostTask(url, gson.toJson(t), new Callback<String>() {
 

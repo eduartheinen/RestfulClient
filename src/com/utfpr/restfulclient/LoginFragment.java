@@ -1,6 +1,7 @@
 package com.utfpr.restfulclient;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,10 @@ public class LoginFragment extends Fragment {
 				OnLoginListener host = (OnLoginListener) getActivity();
 				EditText username = (EditText) getView().findViewById(R.id.editTextUsername);
 				EditText password = (EditText) getView().findViewById(R.id.editTextPassword);
+				
+				SharedPreferences config = getActivity().getPreferences(LoginActivity.MODE_PRIVATE);
+				String lastLogin = config.getString("lastLogin", "");
+				username.setText(lastLogin);
 
 				host.onLogin(username.getText().toString(), password.getText().toString());
 			}
