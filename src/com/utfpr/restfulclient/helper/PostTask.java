@@ -1,6 +1,7 @@
 package com.utfpr.restfulclient.helper;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -24,12 +25,12 @@ public class PostTask extends AsyncTask<String, String, String> {
 				MIMETypes.APPLICATION_JSON.getName()).post(
 				ClientResponse.class, requestBody);
 		if (response.getStatus() != 201 && response.getStatus() != 200) {
-			throw new RuntimeException("failed: http error code = "
-					+ response.getStatus());
+			Log.e("response", response.toString());
 		}
-		final String responseEntity = response.getEntity(String.class)
-				.replaceAll("\\\\", "");
-		return responseEntity.substring(1, responseEntity.length() - 1);
+
+		String responseEntity = response.getEntity(String.class);
+		Log.i("doInBackground@PostTask", responseEntity);
+		return responseEntity;
 	}
 
 	protected void onPostExecute(String result) {
