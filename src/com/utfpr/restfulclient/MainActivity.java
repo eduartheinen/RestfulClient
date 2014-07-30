@@ -35,7 +35,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager(), this);
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -48,21 +48,34 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
+						getActionBar().setSelectedNavigationItem(position);
 					}
 				});
 
 		// For each of the sections in the app, add a tab to the action bar.
+		// for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+		// // Create a tab with text corresponding to the page title defined by
+		// // the adapter. Also specify this Activity object, which implements
+		// // the TabListener interface, as the callback (listener) for when
+		// // this tab is selected.
+		// actionBar.addTab(actionBar.newTab()
+		// .setText(mSectionsPagerAdapter.getPageTitle(i))
+		// .setTabListener(this));
+		// }
+
+	}
+
+	public void updateTabs() {
 		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+
 			// Create a tab with text corresponding to the page title defined by
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
-			actionBar.addTab(actionBar.newTab()
+			getActionBar().addTab(getActionBar().newTab()
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-
 	}
 
 	@Override

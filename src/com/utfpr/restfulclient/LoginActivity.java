@@ -50,13 +50,18 @@ public class LoginActivity extends Activity implements OnLoginListener {
 
 	@Override
 	public void onLogin(String username, String password) {
-		SharedPreferences config = getPreferences(LoginActivity.MODE_PRIVATE);
+
+		SharedPreferences config = this.getSharedPreferences("ConfigFile",
+				LoginActivity.MODE_PRIVATE);
 		SharedPreferences.Editor editor = config.edit();
 		editor.putString("lastLogin", username);
+		editor.commit();
+
 		NetworkHandler rest = NetworkHandler.getInstance();
 		try {
 			rest.write("http://10.0.2.2:8080/restfulServer/login", User.class,
-					new User(null, username, password, null), new Callback<User>() {
+					new User(null, username, password, null),
+					new Callback<User>() {
 
 						@Override
 						public void callback(User user) {
@@ -82,7 +87,7 @@ public class LoginActivity extends Activity implements OnLoginListener {
 	}
 
 	private void handleLogin(User user) {
-		Log.i("handleLogin@LoginActivity", "hai!");
+		Log.i("houston", "handleLogin@LoginActivity: " + user.toString());
 		Intent intent = new Intent(this, MainActivity.class);
 		intent.putExtra("user", user);
 

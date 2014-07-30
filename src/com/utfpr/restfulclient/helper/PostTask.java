@@ -29,7 +29,7 @@ public class PostTask extends AsyncTask<String, String, String> {
 		}
 
 		String responseEntity = response.getEntity(String.class);
-		Log.i("doInBackground@PostTask", responseEntity);
+		Log.i("houston", "doInBackground@PostTask: " + responseEntity);
 		return responseEntity;
 	}
 

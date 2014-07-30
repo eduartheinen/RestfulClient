@@ -29,7 +29,7 @@ public class GetTask extends AsyncTask<String, String, String> {
 		}
 
 		String responseEntity = response.getEntity(String.class);
-		Log.i("doInBackground@GetTask", responseEntity);
+		Log.i("houston", "doInBackground@GetTask: " + responseEntity);
 		
 		return responseEntity;
 	}

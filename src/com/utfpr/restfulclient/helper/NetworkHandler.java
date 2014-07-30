@@ -35,6 +35,7 @@ public class NetworkHandler {
 			public void callback(String result) {
 				callback.callback(new GsonBuilder().create().fromJson(result,
 						clazz));
+				Log.i("houston", "read@NetworkHandler: " + result);
 			}
 		}).execute();
 	}
@@ -46,7 +47,7 @@ public class NetworkHandler {
 
 			@Override
 			public void callback(String result) {
-				Log.i("readList@NetworkHandler", result);
+				Log.i("houston", "readList@NetworkHandler: " + result);
 				final T[] array = new GsonBuilder().create().fromJson(result,
 						clazz);
 				callback.callback(new ArrayList<T>(Arrays.asList(array)));
@@ -62,7 +63,7 @@ public class NetworkHandler {
 
 			@Override
 			public void callback(String result) {
-				Log.i("readList@NetworkHandler", result);
+				Log.i("houston", "syncReadList@NetworkHandler: " + result);
 				final T[] array = new GsonBuilder().create().fromJson(result,
 						clazz);
 				callback.callback(new ArrayList<T>(Arrays.asList(array)));
@@ -70,18 +71,19 @@ public class NetworkHandler {
 		});
 
 		task.execute().get();
-		Log.i("getCategories@sectionsPagerAdapter", "hai!");
 	}
 
 	public <T> void write(final String url, final Class<T> clazz, final T t,
 			final Callback<T> callback) throws InterruptedException,
 			ExecutionException {
+
 		final Gson gson = new GsonBuilder().create();
 		new PostTask(url, gson.toJson(t), new Callback<String>() {
 
 			@Override
 			public void callback(String result) {
 				callback.callback(gson.fromJson(result, clazz));
+				Log.i("houston", "write@NetworkHandler: " + result);
 			}
 		}).execute();
 	}

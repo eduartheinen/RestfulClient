@@ -12,6 +12,9 @@ import android.widget.EditText;
 
 public class LoginFragment extends Fragment {
 
+	EditText username, password;
+	Button loginButton;
+
 	public LoginFragment() {
 	}
 
@@ -21,26 +24,32 @@ public class LoginFragment extends Fragment {
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		View rootView = inflater.inflate(R.layout.fragment_login, container,
 				false);
-
-		Button loginButton = (Button) rootView.findViewById(R.id.buttonLogin);
+		username = (EditText) rootView.findViewById(R.id.editTextUsername);
+		password = (EditText) rootView.findViewById(R.id.editTextPassword);
+		loginButton = (Button) rootView.findViewById(R.id.buttonLogin);
 
 		loginButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Log.i("onClickListener@loginButton", "hai!");
-				OnLoginListener host = (OnLoginListener) getActivity();
-				EditText username = (EditText) getView().findViewById(R.id.editTextUsername);
-				EditText password = (EditText) getView().findViewById(R.id.editTextPassword);
-				
-				SharedPreferences config = getActivity().getPreferences(LoginActivity.MODE_PRIVATE);
-				String lastLogin = config.getString("lastLogin", "");
-				username.setText(lastLogin);
-
-				host.onLogin(username.getText().toString(), password.getText().toString());
+				login();
 			}
 		});
+
+		SharedPreferences config = getActivity().getSharedPreferences(
+				"ConfigFile", LoginActivity.MODE_PRIVATE);
+		String lastLogin = config.getString("lastLogin", "");
+		username.setText(lastLogin);
+
 		return rootView;
+	}
+
+	private void login() {
+		Log.i("onClickListener@loginButton", "hai!");
+		OnLoginListener host = (OnLoginListener) getActivity();
+
+		host.onLogin(username.getText().toString(), password.getText()
+				.toString());
 	}
 }
